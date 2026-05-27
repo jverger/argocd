@@ -1,0 +1,28 @@
+# Patch du ConfigMap argocd-rbac-cm
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-rbac-cm
+  namespace: argocd
+data:
+  policy.default: role:readonly     # Par défaut, tout le monde ne voit que
+  policy.csv: |
+    # Rôle développeur : voir et sync ses apps, pas de delete
+    p, role:developer, applications, get, */*, allow
+    p, role:developer, applications, sync, */*, allow
+    p, role:developer, applications, action/*, */*, allow
+    p, role:developer, logs, get, */*, allow
+
+    # Rôle ops : tout sauf delete des projets et clusters
+    p, role:ops, applications, *, */*, allow
+    p, role:ops, repositories, *, *, allow
+    p, role:ops, clusters, get, *, allow
+
+    # Rôle CI token : sync uniquement sur des Applications précises
+    p, role:ci-bot, applications, get, myproject/*, allow
+    p, role:ci-bot, applications, sync, myproject/*, allow
+
+    # Assignation des rôles aux utilisateurs/groupes SSO
+    g, equipe-dev, role:developer
+    g, equipe-ops, role:ops
+    g, ci-service-account, role:ci-bot

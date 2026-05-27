@@ -13,7 +13,7 @@ spec:
     path: config-repo/nginx-demo
   destination:
     server: https://kubernetes.default.svc
-    namespace: demo-application
+    namespace: demo
   syncPolicy:
     automated:
       prune: true

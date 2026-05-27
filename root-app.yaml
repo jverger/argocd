@@ -1,0 +1,19 @@
+# root-app.yaml (à appliquer une seule fois avec kubectl)
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/jverger/argocd
+    targetRevision: main
+    path: config-repo/apps             # ← dossier contenant les Applications enfants
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd      # ← les Application se créent dans argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

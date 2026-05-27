@@ -7,8 +7,8 @@ spec:
   generators:
     - list:
         elements:
-          - app: nginx-demo
-            namespace: demo
+          #- app: nginx-demo
+          #  namespace: demo
           - app: redis
             namespace: data
           - app: monitoring
